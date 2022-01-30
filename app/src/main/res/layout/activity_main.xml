@@ -10,7 +10,7 @@
         android:id="@+id/btnReq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mandar req"
+        android:text="executar"
         app:layout_constraintBottom_toTopOf="@+id/txtResultado"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

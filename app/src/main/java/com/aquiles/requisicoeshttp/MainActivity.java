@@ -12,6 +12,7 @@ import com.aquiles.requisicoeshttp.api.CEPService;
 import com.aquiles.requisicoeshttp.api.DataService;
 import com.aquiles.requisicoeshttp.model.CEP;
 import com.aquiles.requisicoeshttp.model.Foto;
+import com.aquiles.requisicoeshttp.model.Postagem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +48,34 @@ public class MainActivity extends AppCompatActivity {
         btnReq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //   recuperarCEPRetrofit();
-                recuperarListaRetrofit();
+//                recuperarCEPRetrofit();
+//                recuperarListaRetrofit();
+                salvarPostagem();
             }
         });
 
+    }
+
+    private void salvarPostagem() {
+        Postagem postagem = new Postagem("1221", "titulo da pastagem", "corpo da postagem");
+
+        DataService service = retrofit.create(DataService.class);
+        Call<Postagem> call = service.salvarPostagem(postagem);
+
+        call.enqueue(new Callback<Postagem>() {
+            @Override
+            public void onResponse(Call<Postagem> call, Response<Postagem> response) {
+                if (response.isSuccessful()) {
+                    Postagem resposta = response.body();
+                    txtResultado.setText("codigo:" + response.code() + " id: " + resposta.getId() + " titulo: " + resposta.getTitle());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Postagem> call, Throwable t) {
+
+            }
+        });
     }
 
     private void recuperarListaRetrofit() {
@@ -63,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Foto>> call, Response<List<Foto>> response) {
                 if (response.isSuccessful()) {
                     listaFotos = response.body();
-                    for(int i=0; i<listaFotos.size();i++){
+                    for (int i = 0; i < listaFotos.size(); i++) {
                         Foto foto = listaFotos.get(i);
                         Log.d("resultado", "onResponse: " + foto.getId() + " / " + foto.getTitle());
                     }
