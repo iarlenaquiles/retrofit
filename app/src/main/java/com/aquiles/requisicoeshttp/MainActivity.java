@@ -50,10 +50,53 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                recuperarCEPRetrofit();
 //                recuperarListaRetrofit();
-                salvarPostagem();
+//                salvarPostagem();
+//                atualizarPostagem();
+                deletePostagem();
             }
         });
 
+    }
+
+    private void deletePostagem() {
+        DataService service = retrofit.create(DataService.class);
+        Call<Void> call = service.deletarPostagem(1);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    txtResultado.setText("codigo:" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void atualizarPostagem() {
+        Postagem postagem = new Postagem("1221", null, "corpo da postagem");
+
+        DataService service = retrofit.create(DataService.class);
+        Call<Postagem> call = service.atualizarPostagemPatch(1, postagem);
+
+        call.enqueue(new Callback<Postagem>() {
+            @Override
+            public void onResponse(Call<Postagem> call, Response<Postagem> response) {
+                if (response.isSuccessful()) {
+                    Postagem resposta = response.body();
+                    txtResultado.setText("codigo:" + response.code() + " id: " + resposta.getId() + " titulo: " + resposta.getTitle());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Postagem> call, Throwable t) {
+
+            }
+        });
     }
 
     private void salvarPostagem() {
